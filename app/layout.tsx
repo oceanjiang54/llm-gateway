@@ -36,8 +36,9 @@ export default async function RootLayout({ children }: { children: React.ReactNo
               <>
                 <Link href="/console" className="cta">控制台</Link>
                 <details className="acct">
-                  <summary>{account.length > 18 ? account.slice(0, 15) + "…" : account} ▾</summary>
+                  <summary>用户中心 ▾</summary>
                   <div className="menu">
+                    <div className="whoami">{account}</div>
                     <Link href="/console">控制台</Link>
                     <Link href="/console/keys">API Keys</Link>
                     {isAdmin && <Link href="/admin" style={{ color: "var(--purple)" }}>管理后台</Link>}
