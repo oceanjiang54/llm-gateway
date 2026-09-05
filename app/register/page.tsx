@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
 export default function Register() {
@@ -7,6 +7,8 @@ export default function Register() {
   const [code, setCode] = useState("");
   const [password, setPassword] = useState("");
   const [err, setErr] = useState("");
+  const [qs, setQs] = useState("");
+  useEffect(() => { setQs(window.location.search); }, []);
   const [hint, setHint] = useState("");
   const [countdown, setCountdown] = useState(0);
   const router = useRouter();
@@ -56,7 +58,7 @@ export default function Register() {
       <input placeholder="设置密码（至少8位）" type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
       <button className="btn" onClick={submit}>注册</button>
       <p style={{ marginTop: 16, fontSize: 13, color: "var(--muted)" }}>
-        已有账号？<a href={`/login${typeof window !== "undefined" ? window.location.search : ""}`} style={{ color: "var(--glow)" }}>去登录</a>
+        已有账号？<a href={`/login${qs}`} style={{ color: "var(--glow)" }}>去登录</a>
       </p>
     </div>
   );
