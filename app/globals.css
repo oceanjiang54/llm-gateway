@@ -102,3 +102,47 @@ input::placeholder { color: var(--muted); }
 .model-card .tryit { margin-top: 12px; font-size: 13px; font-weight: 600; color: var(--glow); }
 .model-card:hover .tryit { color: #fff; }
 .step-num { display: inline-flex; width: 26px; height: 26px; border-radius: 50%; background: var(--accent); color: #fff; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; margin-right: 10px; flex-shrink: 0; }
+
+/* ===== 桌面网格类（供响应式覆盖） ===== */
+.grid5 { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-bottom: 16px; }
+.grid-charts { display: grid; grid-template-columns: 1.6fr 1fr; gap: 10px; margin-bottom: 16px; }
+.card { overflow-x: auto; }   /* 表格在窄屏内横向滚动而不撑破布局 */
+
+/* ===== 移动端适配 ===== */
+@media (max-width: 768px) {
+  .nav { padding: 12px 14px; flex-wrap: wrap; gap: 8px; }
+  .nav .links { gap: 14px; font-size: 13.5px; flex-wrap: wrap; }
+  .nav .links a.cta { padding: 7px 14px; }
+  .logo { font-size: 15px; }
+  .logo .en { display: none; }
+
+  .hero { padding: 36px 18px 24px; }
+  .hero h1 { font-size: 29px; letter-spacing: -0.5px; }
+  .hero .sub { font-size: 14px; margin: 14px 0 20px; }
+  .hero .btn { display: block; text-align: center; margin: 0 0 10px 0; }
+  .hero .btn.ghost { margin-left: 0; }
+  .statusline { flex-wrap: wrap; gap: 10px 16px; margin-top: 14px; }
+
+  .container { padding: 24px 14px; }
+  .grid3 { grid-template-columns: 1fr; }
+  .grid5 { grid-template-columns: repeat(2, 1fr); }
+  .grid5 > .card:last-child { grid-column: span 2; }
+  .grid-charts { grid-template-columns: 1fr; }
+  .model-grid { grid-template-columns: 1fr; }
+
+  .card { padding: 16px 16px; }
+  .stat { font-size: 24px; }
+  th, td { padding: 9px 8px; font-size: 12.5px; white-space: nowrap; }
+  pre { font-size: 11.5px; padding: 12px 14px; }
+
+  .form { margin: 48px auto; padding: 0 20px; }
+  .guidebar { flex-wrap: wrap; gap: 10px; font-size: 13px; }
+  .footer { flex-direction: column; gap: 6px; padding: 20px 16px; text-align: center; }
+  .acct .menu { right: -8px; }
+  .toast { bottom: 20px; width: calc(100vw - 32px); text-align: center; }
+}
+
+@media (max-width: 400px) {
+  .hero h1 { font-size: 25px; }
+  .nav .links { gap: 10px; font-size: 13px; }
+}

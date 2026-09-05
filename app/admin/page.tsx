@@ -71,7 +71,7 @@ export default function Admin() {
       </div>
       <p className="section-sub">书童账房：经营全貌与用户管理</p>
 
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: 10, marginBottom: 16 }}>
+      <div className="grid5">
         {metrics.map((m) => (
           <div className="card" key={m.l} style={{ marginBottom: 0, padding: "16px 18px" }}>
             <div className="label">{m.l}</div>
@@ -81,7 +81,7 @@ export default function Admin() {
         ))}
       </div>
 
-      <div style={{ display: "grid", gridTemplateColumns: "1.6fr 1fr", gap: 10, marginBottom: 16 }}>
+      <div className="grid-charts">
         <div className="card" style={{ marginBottom: 0 }}>
           <div className="label">近7天调用量趋势</div>
           <svg viewBox="0 0 300 60" style={{ width: "100%", height: 70 }}>
