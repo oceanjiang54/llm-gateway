@@ -19,7 +19,7 @@ export default async function Home() {
         <h1>AI 书童<span className="dot">，</span>陪伴企业成长<span className="dot">。</span></h1>
         <p className="sub">统一 API 网关 · 智能模型路由 · 企业定制化全面AI升级</p>
         <Link href="/register" className="btn">免费注册，领 $5 额度</Link>
-        <Link href="/playground" className="btn ghost">立即体验</Link>
+        <Link href="/try?model=deepseek-chat" className="btn ghost">立即体验</Link>
         <div className="statusline">
           <span><span className="dot-teal">●</span> OpenAI 兼容格式</span>
           <span><span className="dot-blue">●</span> 流式输出</span>

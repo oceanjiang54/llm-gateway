@@ -114,6 +114,11 @@ export default function Playground() {
         <div className="label">API Key {autoKey && <span style={{ color: "var(--teal)" }}>· 已自动填入刚创建的密钥（仅本次会话有效）</span>}</div>
         <input type="password" placeholder="sk-gw-..." value={apiKey}
           onChange={(e) => { setApiKey(e.target.value); setAutoKey(false); }} autoComplete="off" />
+        {!autoKey && !apiKey && (
+          <p style={{ fontSize: 12.5, color: "var(--muted)", marginTop: -4, marginBottom: 12 }}>
+            没有密钥？<a href={`/try?model=${encodeURIComponent(model)}`} style={{ color: "var(--glow)" }}>点此一键开通（免费领 $5 额度）→</a>
+          </p>
+        )}
         <div className="label">你想问什么</div>
         <textarea value={prompt} onChange={(e) => setPrompt(e.target.value)} rows={3}
           placeholder="例如：帮我写一封给客户的节日问候邮件"
