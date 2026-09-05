@@ -1,0 +1,9 @@
+# 一键部署：docker compose up -d --build
+# 前提：同目录下有配置好的 .env 文件（见 DEPLOY_CN.md）
+services:
+  shutong:
+    build: .
+    ports:
+      - "3000:3000"
+    env_file: .env
+    restart: unless-stopped
