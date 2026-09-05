@@ -33,14 +33,17 @@ export default function Register() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ account, password, code }),
     });
-    if (res.ok) { router.push("/console/keys"); router.refresh(); }
+    if (res.ok) {
+      const next = new URLSearchParams(window.location.search).get("next") || "/console/keys";
+      router.push(next); router.refresh();
+    }
     else setErr((await res.json()).error || "注册失败");
   }
 
   return (
     <div className="form">
       <h2>注册书童</h2>
-      <p className="formsub">新账号赠 $5 试用额度，无需绑卡</p>
+      <p className="formsub">新账号赠 $5 试用额度，无需绑卡 · 注册后自动进入下一步</p>
       <div className="err">{err}</div>
       {hint && <div className="hint">{hint}</div>}
       <input placeholder="邮箱或手机号" value={account} onChange={(e) => setAccount(e.target.value)} />
@@ -52,6 +55,9 @@ export default function Register() {
       </div>
       <input placeholder="设置密码（至少8位）" type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
       <button className="btn" onClick={submit}>注册</button>
+      <p style={{ marginTop: 16, fontSize: 13, color: "var(--muted)" }}>
+        已有账号？<a href={`/login${typeof window !== "undefined" ? window.location.search : ""}`} style={{ color: "var(--glow)" }}>去登录</a>
+      </p>
     </div>
   );
 }

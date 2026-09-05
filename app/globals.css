@@ -88,3 +88,17 @@ input::placeholder { color: var(--muted); }
 
 .toast { position: fixed; bottom: 32px; left: 50%; transform: translateX(-50%); background: var(--card2); border: 1px solid var(--accent); color: var(--text); font-size: 13px; padding: 12px 22px; border-radius: 10px; z-index: 100; box-shadow: 0 8px 30px rgba(0,0,0,.4); animation: toastin .18s ease-out; max-width: 90vw; }
 @keyframes toastin { from { opacity: 0; transform: translate(-50%, 8px); } to { opacity: 1; transform: translate(-50%, 0); } }
+
+.acct { position: relative; }
+.acct summary { list-style: none; cursor: pointer; color: var(--sub); font-size: 13.5px; padding: 6px 10px; border: 1px solid var(--line2); border-radius: 8px; user-select: none; }
+.acct summary::-webkit-details-marker { display: none; }
+.acct[open] summary { color: var(--text); border-color: var(--muted); }
+.acct .menu { position: absolute; right: 0; top: calc(100% + 8px); background: var(--card2); border: 1px solid var(--line2); border-radius: 10px; padding: 6px; min-width: 170px; display: flex; flex-direction: column; z-index: 50; box-shadow: 0 10px 30px rgba(0,0,0,.45); }
+.acct .menu a { padding: 9px 14px; border-radius: 7px; font-size: 13.5px; color: var(--sub); }
+.acct .menu a:hover { background: var(--card); color: var(--text); }
+.acct .menu a.danger { color: var(--red); border-top: 1px solid var(--line); border-radius: 0 0 7px 7px; margin-top: 4px; }
+.guidebar { background: var(--blue-bg); border: 1px solid var(--accent); border-radius: 10px; padding: 14px 18px; margin-bottom: 16px; font-size: 14px; color: var(--text); display: flex; align-items: center; }
+.guidebar.done { background: var(--teal-bg); border-color: var(--teal); }
+.model-card .tryit { margin-top: 12px; font-size: 13px; font-weight: 600; color: var(--glow); }
+.model-card:hover .tryit { color: #fff; }
+.step-num { display: inline-flex; width: 26px; height: 26px; border-radius: 50%; background: var(--accent); color: #fff; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; margin-right: 10px; flex-shrink: 0; }

@@ -1,22 +1,24 @@
 import "./globals.css";
 import Link from "next/link";
+import { eq } from "drizzle-orm";
 import { getSessionUserId } from "@/lib/auth";
 import { isAdminAccount } from "@/lib/admin";
-import { eq } from "drizzle-orm";
 import { db, schema } from "@/lib/db";
 
 export const metadata = {
   title: "书童 ShuTong · 大模型统一网关",
-  description: "一个 API 唤来百家大模型。OpenAI 兼容 · 智能路由 · 按 token 透明计费",
+  description: "AI 书童，陪伴企业成长。统一 API 网关 · 智能模型路由 · 按 token 透明计费",
 };
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const userId = await getSessionUserId();
+  let account = "";
   let isAdmin = false;
   if (userId) {
     const u = (await db.select({ account: schema.users.account }).from(schema.users).where(eq(schema.users.id, userId)))[0];
-    isAdmin = !!u && isAdminAccount(u.account);
+    if (u) { account = u.account; isAdmin = isAdminAccount(u.account); }
   }
+  const loggedIn = !!account;
   return (
     <html lang="zh">
       <body>
@@ -27,13 +29,21 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           </Link>
           <div className="links">
             <Link href="/#models">模型</Link>
+            <Link href="/playground">体验</Link>
+            <Link href="/guide">接入</Link>
             <Link href="/docs">文档</Link>
-            <Link href="/playground">试笔</Link>
-            {userId ? (
+            {loggedIn ? (
               <>
-                <Link href="/console/keys">API Keys</Link>
-                {isAdmin && <Link href="/admin" style={{ color: "var(--purple)" }}>管理</Link>}
                 <Link href="/console" className="cta">控制台</Link>
+                <details className="acct">
+                  <summary>{account.length > 18 ? account.slice(0, 15) + "…" : account} ▾</summary>
+                  <div className="menu">
+                    <Link href="/console">控制台</Link>
+                    <Link href="/console/keys">API Keys</Link>
+                    {isAdmin && <Link href="/admin" style={{ color: "var(--purple)" }}>管理后台</Link>}
+                    <a href="/logout" className="danger">退出登录</a>
+                  </div>
+                </details>
               </>
             ) : (
               <>

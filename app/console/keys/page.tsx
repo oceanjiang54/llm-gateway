@@ -59,10 +59,15 @@ export default function Keys() {
     setKeys((await res.json()).keys);
   }
 
+  const [onboarding, setOnboarding] = useState(false);
+  const [created, setCreated] = useState(false);
+
   useEffect(() => {
-    // 读取首页模型卡片带来的 ?model= 参数
-    const m = new URLSearchParams(window.location.search).get("model");
+    // 读取首页模型卡片带来的 ?model= 参数与引导标记
+    const sp = new URLSearchParams(window.location.search);
+    const m = sp.get("model");
     if (m) setModel(m);
+    if (sp.get("onboarding") === "1") setOnboarding(true);
     load();
     fetch("/api/models").then((r) => r.json()).then((d) => setModels(d.models || []));
   }, []);
@@ -77,6 +82,9 @@ export default function Keys() {
     const data = await res.json();
     setNewKey(data.key);
     setName("");
+    setCreated(true);
+    // 暂存到浏览器本会话，供体验页自动填入（关闭标签即清除，不落库）
+    try { sessionStorage.setItem("st_key", data.key); } catch {}
     const ok = await copyText(data.key);
     showToast(ok ? "密钥已创建，并自动复制到剪贴板" : "密钥已创建（自动复制失败，请手动复制）");
     load();
@@ -99,7 +107,7 @@ export default function Keys() {
     showToast(ok ? `已复制 ${model} 的调用命令模板，请将密钥替换为你自己的` : "复制失败，请重试");
   }
 
-  // 试用：跳转试笔页，带上当前所选模型
+  // 试用：跳转体验页，带上当前所选模型
   function tryIt() {
     location.href = `/playground?model=${encodeURIComponent(model)}`;
   }
@@ -107,7 +115,18 @@ export default function Keys() {
   return (
     <div className="container">
       <h2 className="section-title">API Keys</h2>
-      <p className="section-sub">创建即自动复制 · 「试用」直达试笔体验 ·「复制命令」获取 curl 模板</p>
+      <p className="section-sub">创建即自动复制 · 「试用」直达立即体验 ·「复制命令」获取 curl 模板</p>
+      {onboarding && !created && (
+        <div className="guidebar">第 2 步 · 创建你的专属密钥：点下方「创建」按钮即可（名称可不填）</div>
+      )}
+      {onboarding && created && (
+        <div className="guidebar done">
+          密钥已创建并暂存 ✓ 最后一步：
+          <a href={`/playground?model=${encodeURIComponent(model)}`}
+            onClick={(e) => { e.preventDefault(); window.location.assign(`/playground?model=${encodeURIComponent(model)}`); }}
+            className="btn" style={{ marginLeft: 12, padding: "8px 20px" }}>去体验，直接调用 →</a>
+        </div>
+      )}
 
       <div className="card">
         <div className="label">调用模型</div>

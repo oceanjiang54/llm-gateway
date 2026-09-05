@@ -38,26 +38,29 @@ export const deepseek: Provider = {
     const decoder = new TextDecoder();
     let buffer = "";
 
-    // 透传 SSE，同时从末尾 usage 块提取用量用于计费
+    // 透传 SSE（主动读取循环），同时从末尾 usage 块提取用量用于计费
     return new ReadableStream({
-      async pull(controller) {
-        const { done, value } = await reader.read();
-        if (done) {
-          controller.close();
-          return;
-        }
-        buffer += decoder.decode(value, { stream: true });
-        const lines = buffer.split("\n");
-        buffer = lines.pop() || "";
-        for (const line of lines) {
-          if (line.startsWith("data: ") && line !== "data: [DONE]") {
-            try {
-              const chunk = JSON.parse(line.slice(6));
-              if (chunk.usage) await onUsage(chunk.usage as Usage);
-            } catch {}
+      async start(controller) {
+        try {
+          while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
+            buffer += decoder.decode(value, { stream: true });
+            const lines = buffer.split("\n");
+            buffer = lines.pop() || "";
+            for (const line of lines) {
+              if (line.startsWith("data: ") && line !== "data: [DONE]") {
+                try {
+                  const chunk = JSON.parse(line.slice(6));
+                  if (chunk.usage) await onUsage(chunk.usage as Usage);
+                } catch {}
+              }
+            }
+            controller.enqueue(value);
           }
+        } finally {
+          controller.close();
         }
-        controller.enqueue(value);
       },
       cancel() { reader.cancel(); },
     });

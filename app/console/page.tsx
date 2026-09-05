@@ -25,6 +25,10 @@ export default async function Console() {
     <div className="container">
       <h2 className="section-title">控制台</h2>
       <p className="section-sub">书童记账：每一笔调用、每一分成本，清清楚楚</p>
+      <div style={{ display: "flex", gap: 10, marginBottom: 16 }}>
+        <a href="/console/keys" className="btn secondary" style={{ padding: "8px 18px", fontSize: 13 }}>管理密钥</a>
+        <a href="/playground" className="btn" style={{ padding: "8px 18px", fontSize: 13 }}>去体验</a>
+      </div>
       <div className="grid3">
         <div className="card">
           <div className="label">账户余额 · 试用额度</div>

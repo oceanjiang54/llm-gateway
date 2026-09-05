@@ -19,7 +19,7 @@ export default async function Home() {
         <h1>AI 书童<span className="dot">，</span>陪伴企业成长<span className="dot">。</span></h1>
         <p className="sub">统一 API 网关 · 智能模型路由 · 企业定制化全面AI升级</p>
         <Link href="/register" className="btn">免费注册，领 $5 额度</Link>
-        <Link href="/docs" className="btn ghost">查看文档</Link>
+        <Link href="/playground" className="btn ghost">立即体验</Link>
         <div className="statusline">
           <span><span className="dot-teal">●</span> OpenAI 兼容格式</span>
           <span><span className="dot-blue">●</span> 流式输出</span>
@@ -29,12 +29,12 @@ export default async function Home() {
 
       <div className="container" id="models">
         <h2 className="section-title">支持的模型</h2>
-        <p className="section-sub">价格为每百万 tokens（美元），点击卡片选择模型，直达控制台发起调用</p>
+        <p className="section-sub">价格为每百万 tokens（美元），价格为每百万 tokens（美元）· 点「立即试用」三步跑通你的第一次调用</p>
         <div className="model-grid">
           {models.map((m) => {
             const tag = TAGS[m.id] ?? { text: m.provider, cls: "blue" };
             return (
-              <Link href={`/console/keys?model=${m.id}`} className="model-card" key={m.id}>
+              <Link href={`/try?model=${m.id}`} className="model-card" key={m.id}>
                 <div className="head">
                   <span className="name">{m.displayName}</span>
                   <span className={`tag ${tag.cls}`}>{tag.text}</span>
@@ -44,6 +44,7 @@ export default async function Home() {
                   <span>输入 <b>${m.inputPerM.toFixed(2)}</b></span>
                   <span>输出 <b>${m.outputPerM.toFixed(2)}</b></span>
                 </div>
+                <div className="tryit">立即试用 →</div>
               </Link>
             );
           })}
