@@ -61,5 +61,10 @@ for (const [id, provider, upstreamId, displayName, ui, uo] of models) {
     VALUES (${id}, ${provider}, ${upstreamId}, ${displayName}, ${pi}, ${po}, ${ui}, ${uo}, TRUE)
     ON CONFLICT (id) DO UPDATE SET input_per_m = ${pi}, output_per_m = ${po}, upstream_input_per_m = ${ui}, upstream_output_per_m = ${uo}`;
 }
-console.log("数据库初始化完成：定价含 30% 加价（进账≠成本，毛利可计）");
+// 安全加固：开启 RLS 且不建策略 = 拒绝 Supabase 自动 REST API 访问；
+// 应用以表所有者身份直连，天然绕过 RLS，业务不受影响
+for (const t of ["users", "api_keys", "models", "usage_logs", "verification_codes"]) {
+  await sql`ALTER TABLE ${sql(t)} ENABLE ROW LEVEL SECURITY`;
+}
+console.log("数据库初始化完成：定价含 30% 加价（进账≠成本，毛利可计）· RLS 已开启");
 await sql.end();

@@ -18,6 +18,8 @@ async function call(upstreamModel: string, req: ChatRequest, stream: boolean) {
       "Content-Type": "application/json",
       "x-api-key": process.env.ANTHROPIC_API_KEY || "",
       "anthropic-version": "2023-06-01",
+      // 经中继调用时的鉴权（国内部署场景，见 RELAY.md）
+      ...(process.env.ANTHROPIC_RELAY_TOKEN ? { "x-relay-token": process.env.ANTHROPIC_RELAY_TOKEN } : {}),
     },
     body: JSON.stringify({
       model: upstreamModel,
