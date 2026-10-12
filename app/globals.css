@@ -426,3 +426,15 @@ a.mcard:hover { border-color: var(--accent); box-shadow: var(--shadow); color: v
   -webkit-mask-image: linear-gradient(to right, transparent, #000 5%, #000 95%, transparent), linear-gradient(to bottom, transparent, #000 4%, #000 96%, transparent);
   -webkit-mask-composite: source-in; mask-image: linear-gradient(to right, transparent, #000 5%, #000 95%, transparent), linear-gradient(to bottom, transparent, #000 4%, #000 96%, transparent); mask-composite: intersect; }
 @media (max-width: 900px) { .hero-art img { max-width: 360px; } }
+
+/* 手机端：模型生态改为标题单独一行 + 整齐网格 */
+@media (max-width: 640px) {
+  .eco { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; padding: 20px 0 40px; }
+  .eco .lbl { grid-column: 1 / -1; margin: 0 0 4px; font-size: 13px; }
+  .eco .chip { justify-content: flex-start; gap: 7px; font-size: 13.5px; padding: 6px 10px 6px 6px; border-radius: 12px; min-width: 0; white-space: nowrap; }
+  .eco .av { width: 24px; height: 24px; border-radius: 6px; font-size: 12px; flex-shrink: 0; }
+}
+@media (max-width: 380px) {
+  .eco .chip { font-size: 12.5px; gap: 5px; padding: 5px 6px 5px 5px; }
+  .eco .av { width: 22px; height: 22px; font-size: 11px; }
+}
