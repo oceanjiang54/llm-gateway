@@ -26,6 +26,7 @@ export interface ChatResult {
 // 每个上游模型服务实现这个接口 —— 之后接入通义/智谱/文心只需新增一个适配器
 export interface Provider {
   name: string;
+  configured?: () => boolean; // 上游密钥是否已配置
   chat(upstreamModel: string, req: ChatRequest): Promise<ChatResult>;
   // 返回 OpenAI 风格 SSE 流；onUsage 在流结束时回传用量以便计费
   chatStream(

@@ -4,6 +4,7 @@ import { eq } from "drizzle-orm";
 import { randomUUID } from "crypto";
 import { db, schema } from "@/lib/db";
 import { createSession } from "@/lib/auth";
+import { SIGNUP_BONUS_CNY } from "@/lib/currency";
 import { consumeCode, isEmail, isCnPhone } from "@/lib/verify";
 
 export async function POST(req: NextRequest) {
@@ -18,7 +19,7 @@ export async function POST(req: NextRequest) {
   if (exists) return NextResponse.json({ error: "该账号已注册" }, { status: 409 });
   const id = randomUUID();
   await db.insert(schema.users).values({
-    id, account, accountType, passwordHash: await bcrypt.hash(password, 10), balanceUsd: 5.0, createdAt: new Date(),
+    id, account, accountType, passwordHash: await bcrypt.hash(password, 10), balance: SIGNUP_BONUS_CNY, createdAt: new Date(),
   });
   await createSession(id);
   return NextResponse.json({ ok: true });

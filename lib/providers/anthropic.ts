@@ -37,6 +37,7 @@ async function call(upstreamModel: string, req: ChatRequest, stream: boolean) {
 // 把 Anthropic 响应转换为 OpenAI Chat Completions 格式（对外统一）
 export const anthropic: Provider = {
   name: "anthropic",
+  configured: () => !!(process.env.ANTHROPIC_API_KEY || process.env.ANTHROPIC_RELAY_TOKEN),
 
   async chat(upstreamModel, req): Promise<ChatResult> {
     const res = await call(upstreamModel, req, false);

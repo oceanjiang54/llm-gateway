@@ -33,7 +33,7 @@ export default function Login() {
       <input placeholder="密码" type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
       <button className="btn" onClick={submit}>登录</button>
       <p style={{ marginTop: 16, fontSize: 13, color: "var(--muted)" }}>
-        没有账号？<a href={`/register${qs}`} style={{ color: "var(--glow)" }}>免费注册，送 $5 额度</a>
+        没有账号？<a href={`/register${qs}`} style={{ color: "var(--glow)" }}>免费注册，送 ¥30 额度</a>
       </p>
     </div>
   );

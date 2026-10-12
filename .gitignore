@@ -2,3 +2,4 @@ node_modules/
 .next/
 .env
 data.db*
+public/shutong.mjs

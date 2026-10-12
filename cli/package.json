@@ -1,0 +1,10 @@
+{
+  "name": "shutong",
+  "version": "0.1.0",
+  "description": "书童 ShuTong 命令行客户端：终端里选模型、流式对话，支持平台记忆",
+  "type": "module",
+  "bin": { "shutong": "shutong.mjs" },
+  "engines": { "node": ">=18" },
+  "license": "UNLICENSED",
+  "private": true
+}

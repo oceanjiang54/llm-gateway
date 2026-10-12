@@ -4,10 +4,11 @@ import { eq } from "drizzle-orm";
 import { getSessionUserId } from "@/lib/auth";
 import { isAdminAccount } from "@/lib/admin";
 import { db, schema } from "@/lib/db";
+import SiteFooter from "@/components/SiteFooter";
 
 export const metadata = {
   title: "书童 ShuTong · 大模型统一网关",
-  description: "AI 书童，陪伴企业成长。统一 API 网关 · 智能模型路由 · 按 token 透明计费",
+  description: "连接全球 AI 模型与企业真实业务：统一接入主流大模型，并通过 Agent、Workflow 与 FDE 服务帮助企业完成 AI 落地。",
 };
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
@@ -28,9 +29,9 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             书童 <span className="en">ShuTong</span>
           </Link>
           <div className="links">
-            <Link href="/#models">模型</Link>
+            <Link href="/models">模型市场</Link>
+            <Link href="/#solutions">解决方案</Link>
             <Link href="/playground">体验</Link>
-            <Link href="/guide">接入</Link>
             <Link href="/docs">文档</Link>
             {loggedIn ? (
               <>
@@ -55,10 +56,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           </div>
         </nav>
         {children}
-        <footer className="footer">
-          <span>书童 ShuTong · 研墨备纸，百模听差</span>
-          <span>原型演示版 · 上线前将完成生成式AI服务备案</span>
-        </footer>
+        <SiteFooter />
       </body>
     </html>
   );

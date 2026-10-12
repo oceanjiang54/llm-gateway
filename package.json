@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "db:setup": "node scripts/setup-db.mjs"
+    "db:setup": "node scripts/setup-db.mjs",
+    "predev": "node -e \"require('fs').copyFileSync('cli/shutong.mjs','public/shutong.mjs')\"",
+    "prebuild": "node -e \"require('fs').copyFileSync('cli/shutong.mjs','public/shutong.mjs')\""
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",

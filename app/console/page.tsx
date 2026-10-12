@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { desc, eq, sql } from "drizzle-orm";
 import { db, schema } from "@/lib/db";
 import { getSessionUserId } from "@/lib/auth";
+import { yuan } from "@/lib/currency";
 
 export const dynamic = "force-dynamic";
 
@@ -32,7 +33,7 @@ export default async function Console() {
       <div className="grid3">
         <div className="card">
           <div className="label">账户余额 · 试用额度</div>
-          <div className="stat">${user.balanceUsd.toFixed(4)}</div>
+          <div className="stat">{yuan(user.balance)}</div>
         </div>
         <div className="card">
           <div className="label">累计调用次数</div>
@@ -56,7 +57,7 @@ export default async function Console() {
                 <td><code>{l.model}</code></td>
                 <td>{l.inputTokens}</td>
                 <td>{l.outputTokens}</td>
-                <td>${l.costUsd.toFixed(6)}</td>
+                <td>{yuan(l.cost)}</td>
                 <td>{l.latencyMs}ms</td>
                 <td>{l.status}</td>
               </tr>

@@ -68,3 +68,53 @@ scripts/setup-db.mjs                    一次性建表与定价初始化
 - 短信真实发送：需阿里云/腾讯云短信签名审批（需企业主体）后接入 lib/verify.ts 预留位
 - 智能模型路由（model: "auto" 按任务难度自动选模型 —— pitch 核心卖点）
 - 速率限制、管理后台
+
+## 六、v25 新增（2026-10）
+
+**首页改版**：明亮企业风；七个板块（首屏双入口、模型市场、AI 基础设施、FDE 落地流程、Agent 演示、为什么选择我们、底部 CTA）。
+新页面：`/models` 模型市场、`/models/<id>` 模型详情。企业留资弹窗 → 管理后台「企业线索」。
+
+**新模型**：Qwen Max / Qwen Plus（阿里云百炼国际站）、Kimi K2.6（Moonshot 国际站）。
+MiniMax / GPT / Gemini 在模型市场显示为「即将接入」。
+
+**平台记忆**：请求带 `conversation_id`，网关保存上下文并按阈值压缩，见接入页「进阶用法」。
+
+**命令行客户端**：`cli/` 目录，`npm link` 后终端输入 `shutong`。
+
+**Claude Code 接入**：`ANTHROPIC_BASE_URL=https://<域名>/api/anthropic` + `ANTHROPIC_AUTH_TOKEN=sk-gw-...`，
+按 Anthropic 官方价 ×1.3 计费（含缓存读写）。单次请求最长 300 秒（Vercel 免费版 Fluid compute 上限）。
+
+新增环境变量（均可选）：
+
+| 变量 | 说明 |
+|---|---|
+| `QWEN_API_KEY` | 阿里云百炼国际站密钥；不配则 Qwen 模型返回 503 |
+| `KIMI_API_KEY` | Moonshot 国际站密钥；不配则 Kimi 返回 503 |
+| `QWEN_BASE_URL` / `KIMI_BASE_URL` | 改用国内站时覆盖（见 lib/providers/index.ts 注释） |
+| `MEMORY_COMPRESS_TOKENS` | 触发压缩的输入 token 阈值，默认 8000 |
+| `MEMORY_KEEP_MESSAGES` | 压缩时保留的最近消息条数，默认 6 |
+| `MEMORY_SUMMARY_MODEL` | 生成摘要用的模型，默认 deepseek-chat |
+
+升级步骤：拉取代码后执行一次 `npm run db:setup`（新增模型元数据列、留资表、记忆表，幂等）。
+
+## 七、v26 更新（2026-10）
+
+**升级时必须执行一次 `npm run db:setup`**：把余额、限额、历史用量从美元换算为人民币（按 `USD_CNY_RATE`，可重复执行，不会重复换算），并新增按时间查询的索引。
+
+| 变更 | 说明 |
+|---|---|
+| 人民币结算 | 所有价格、余额、扣费、后台统计改为人民币。模型售价 = 上游美元价 × 汇率 × 1.3 |
+| 文档中心 | `/docs` 默认「三分钟上手」，左侧导航：对话补全、流式输出、模型列表、平台记忆、错误码、Claude Code、命令行、计费说明。旧 `/guide` 自动跳转 `/docs`。全部示例代码集中在 `lib/docs-samples.ts`，已用 openai Python / Node SDK 与 curl 逐条跑通 |
+| 新接口 | `GET /api/v1/models`：OpenAI 兼容模型列表（含人民币价格、是否可用），可用来检查 Key |
+| 命令行下载 | 构建时把 `cli/shutong.mjs` 复制到 `public/shutong.mjs`，用户按文档 `curl` 下载即可，无需代码库 |
+| 上游报错 | 上游原始错误只写服务端日志；上游 401/403 对外返回 503「模型暂不可用」，429 透传为 429 |
+| 管理后台 | 新增时间区间（今天/昨天/近 7 天/近 30 天/本月/自定义），默认当天，按北京时间统计；指标、趋势、模型分布、线索、用户消费均按区间 |
+| 页脚 | 站点地图：产品 / 解决方案 / 开发者 / 关于 |
+
+新增环境变量（均可不填）：
+
+| 变量 | 默认 | 说明 |
+|---|---|---|
+| `USD_CNY_RATE` | `7.0` | 固定汇率（2026-10-12 市场价约 6.69，向上取整留出余量） |
+| `SIGNUP_BONUS_CNY` | `30` | 注册赠送额度（元） |
+| `REPORT_TZ` | `Asia/Shanghai` | 管理后台按哪个时区划分「一天」 |

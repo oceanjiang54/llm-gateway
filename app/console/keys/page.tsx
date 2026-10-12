@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 interface KeyRow { id: string; name: string; prefix: string; disabled: boolean; createdAt: string; lastUsedAt: string | null; }
 interface ModelRow { id: string; displayName: string; }
@@ -41,6 +42,7 @@ function buildCurl(model: string) {
 }
 
 export default function Keys() {
+  const router = useRouter();
   const [keys, setKeys] = useState<KeyRow[]>([]);
   const [models, setModels] = useState<ModelRow[]>([]);
   const [model, setModel] = useState("deepseek-chat");
@@ -69,6 +71,8 @@ export default function Keys() {
     if (m) setModel(m);
     if (sp.get("onboarding") === "1") setOnboarding(true);
     load();
+    // 预取体验页：首次点「试用」不再等待页面编译/加载
+    router.prefetch("/playground");
     fetch("/api/models").then((r) => r.json()).then((d) => setModels(d.models || []));
   }, []);
 
@@ -107,9 +111,9 @@ export default function Keys() {
     showToast(ok ? `已复制 ${model} 的调用命令模板，请将密钥替换为你自己的` : "复制失败，请重试");
   }
 
-  // 试用：跳转体验页，带上当前所选模型
+  // 试用：客户端路由跳转体验页（不整页刷新），带上当前所选模型
   function tryIt() {
-    location.href = `/playground?model=${encodeURIComponent(model)}`;
+    router.push(`/playground?model=${encodeURIComponent(model)}`);
   }
 
   return (
@@ -123,7 +127,7 @@ export default function Keys() {
         <div className="guidebar done">
           密钥已创建并暂存 ✓ 最后一步：
           <a href={`/playground?model=${encodeURIComponent(model)}`}
-            onClick={(e) => { e.preventDefault(); window.location.assign(`/playground?model=${encodeURIComponent(model)}`); }}
+            onClick={(e) => { e.preventDefault(); tryIt(); }}
             className="btn" style={{ marginLeft: 12, padding: "8px 20px" }}>去体验，直接调用 →</a>
         </div>
       )}
@@ -177,7 +181,7 @@ export default function Keys() {
                     <>
                       <button className="btn secondary" onClick={() => disable(k.id)} style={{ padding: "6px 12px", fontSize: 12 }}>停用</button>
                       <button className="btn secondary" onClick={copyCmd} style={{ padding: "6px 12px", fontSize: 12, marginLeft: 8 }}>复制命令</button>
-                      <button className="btn" onClick={tryIt} style={{ padding: "6px 12px", fontSize: 12, marginLeft: 8 }}>试用</button>
+                      <button type="button" className="btn" onClick={tryIt} style={{ padding: "6px 12px", fontSize: 12, marginLeft: 8 }}>试用</button>
                     </>
                   )}
                 </td>

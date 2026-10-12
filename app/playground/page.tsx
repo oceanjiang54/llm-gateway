@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
+import { yuan } from "@/lib/currency";
 
 interface ModelRow { id: string; displayName: string; inputPerM: number; outputPerM: number; }
 interface Usage { prompt_tokens: number; completion_tokens: number; }
@@ -14,7 +15,7 @@ export default function Playground() {
   const [loading, setLoading] = useState(false);
   const [output, setOutput] = useState("");
   const [status, setStatus] = useState<{ ok: boolean; code: number } | null>(null);
-  const [stats, setStats] = useState<{ usage?: Usage; costUsd?: number; ms: number } | null>(null);
+  const [stats, setStats] = useState<{ usage?: Usage; cost?: number; ms: number } | null>(null);
   const [showCode, setShowCode] = useState(false);
   const [toast, setToast] = useState("");
   const outRef = useRef<HTMLDivElement>(null);
@@ -59,7 +60,16 @@ export default function Playground() {
       if (!res.ok) {
         const data = await res.json().catch(() => ({}));
         setStatus({ ok: false, code: res.status });
-        setOutput(data.error?.message || "调用失败");
+        const hint: Record<number, string> = {
+          401: "API Key 无效或已停用，请检查是否完整粘贴，或在控制台新建一个",
+          402: "账户余额不足",
+          403: "账户已被停用，请联系管理员",
+          404: "模型不存在",
+          429: data.error?.message === "Daily usage limit reached" ? "已达今日用量上限，明天自动恢复" : "模型繁忙（上游限流），请稍后再试",
+          502: "上游模型服务异常，请稍后重试",
+          503: "该模型暂不可用，请先换用其他模型",
+        };
+        setOutput(hint[res.status] || data.error?.message || "调用失败");
         setLoading(false);
         return;
       }
@@ -87,8 +97,8 @@ export default function Playground() {
         outRef.current?.scrollIntoView({ block: "nearest" });
       }
       const m = models.find((x) => x.id === model);
-      const costUsd = m && usage ? (usage.prompt_tokens / 1e6) * m.inputPerM + (usage.completion_tokens / 1e6) * m.outputPerM : undefined;
-      setStats({ usage, costUsd, ms: Math.round(performance.now() - t0) });
+      const cost = m && usage ? (usage.prompt_tokens / 1e6) * m.inputPerM + (usage.completion_tokens / 1e6) * m.outputPerM : undefined;
+      setStats({ usage, cost, ms: Math.round(performance.now() - t0) });
     } catch (e: any) {
       setStatus({ ok: false, code: 0 });
       setOutput(e instanceof TypeError ? "请求未能发出：密钥中可能含有多余字符，请重新完整复制后再试" : e.message || "网络错误");
@@ -116,7 +126,7 @@ export default function Playground() {
           onChange={(e) => { setApiKey(e.target.value); setAutoKey(false); }} autoComplete="off" />
         {!autoKey && !apiKey && (
           <p style={{ fontSize: 12.5, color: "var(--muted)", marginTop: -4, marginBottom: 12 }}>
-            没有密钥？<a href={`/try?model=${encodeURIComponent(model)}`} style={{ color: "var(--glow)" }}>点此一键开通（免费领 $5 额度）→</a>
+            没有密钥？<a href={`/try?model=${encodeURIComponent(model)}`} style={{ color: "var(--glow)" }}>点此一键开通（免费领 ¥30 额度）→</a>
           </p>
         )}
         <div className="label">你想问什么</div>
@@ -151,7 +161,7 @@ export default function Playground() {
             {stats && (
               <span style={{ color: "var(--muted)", fontFamily: "var(--mono)" }}>
                 {stats.usage ? `input ${stats.usage.prompt_tokens} · output ${stats.usage.completion_tokens} tokens · ` : ""}
-                {stats.costUsd != null ? `$${stats.costUsd.toFixed(6)} · ` : ""}{(stats.ms / 1000).toFixed(1)}s
+                {stats.cost != null ? `${yuan(stats.cost)} · ` : ""}{(stats.ms / 1000).toFixed(1)}s
               </span>
             )}
           </div>

@@ -45,7 +45,7 @@ export default function Register() {
   return (
     <div className="form">
       <h2>注册书童</h2>
-      <p className="formsub">新账号赠 $5 试用额度，无需绑卡 · 注册后自动进入下一步</p>
+      <p className="formsub">新账号赠 ¥30 试用额度，无需绑卡 · 注册后自动进入下一步</p>
       <div className="err">{err}</div>
       {hint && <div className="hint">{hint}</div>}
       <input placeholder="邮箱或手机号" value={account} onChange={(e) => setAccount(e.target.value)} />
