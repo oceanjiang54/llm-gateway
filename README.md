@@ -15,7 +15,7 @@ npm run dev             # http://localhost:3000
 - DATABASE_URL   Supabase 连接串（见部署第 2 步；本地开发也直接连 Supabase）
 - AUTH_SECRET    随机长字符串（openssl rand -base64 32 生成）
 - ANTHROPIC_API_KEY / DEEPSEEK_API_KEY   上游模型密钥
-- RESEND_API_KEY（可选）配置后验证码走真实邮件；不配置则为开发模式（验证码直接显示在注册页面）
+- RESEND_API_KEY（可选）配置后验证码走真实邮件；不配置则为开发模式（验证码直接显示在注册页面）。配合 MAIL_FROM 使用，发件域名须先在 Resend 后台 Domains 验证；发送失败时页面提示重试，原因写在服务端日志 `[mail]` 行
 
 ## 二、部署到 Vercel（约 20 分钟）
 

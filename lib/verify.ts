@@ -28,16 +28,36 @@ export async function issueCode(target: string): Promise<{ ok: boolean; error?: 
   });
 
   if (isEmail(target) && process.env.RESEND_API_KEY) {
-    await fetch("https://api.resend.com/emails", {
-      method: "POST",
-      headers: { "Content-Type": "application/json", Authorization: `Bearer ${process.env.RESEND_API_KEY}` },
-      body: JSON.stringify({
-        from: process.env.MAIL_FROM || "noreply@yourdomain.com",
-        to: target,
-        subject: "您的验证码",
-        text: `您的注册验证码是 ${code}，5分钟内有效。`,
-      }),
-    });
+    // 发件地址的域名必须已在 Resend 后台验证（如 shutong.ai）；未验证时只能用 onboarding@resend.dev 发给 Resend 账号本人
+    const from = process.env.MAIL_FROM || "书童 ShuTong <noreply@shutong.ai>";
+    try {
+      const res = await fetch(process.env.RESEND_BASE_URL || "https://api.resend.com/emails", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${process.env.RESEND_API_KEY}` },
+        body: JSON.stringify({
+          from,
+          to: target,
+          subject: `书童验证码：${code}`,
+          text: `您的书童验证码是 ${code}，5 分钟内有效。如非本人操作，请忽略此邮件。`,
+          html: `<div style="font-family:-apple-system,'PingFang SC',sans-serif;max-width:440px;margin:0 auto;padding:28px;color:#151a2d">
+  <div style="font-size:18px;font-weight:700;margin-bottom:18px">书童 ShuTong</div>
+  <div style="font-size:14px;color:#545c73;margin-bottom:10px">您的验证码是：</div>
+  <div style="font-size:32px;font-weight:700;letter-spacing:6px;color:#3b4fd8;margin-bottom:18px">${code}</div>
+  <div style="font-size:13px;color:#8a92a8;line-height:1.8">5 分钟内有效。如非本人操作，请忽略此邮件。</div>
+</div>`,
+        }),
+      });
+      if (!res.ok) {
+        // 发送失败：作废这条验证码，让用户可以立刻重试；具体原因只写服务端日志
+        console.error(`[mail] Resend ${res.status}:`, (await res.text()).slice(0, 300));
+        await db.delete(schema.verificationCodes).where(and(eq(schema.verificationCodes.target, target), eq(schema.verificationCodes.code, code)));
+        return { ok: false, error: "验证码邮件发送失败，请稍后重试" };
+      }
+    } catch (e: any) {
+      console.error("[mail] Resend request failed:", e.message);
+      await db.delete(schema.verificationCodes).where(and(eq(schema.verificationCodes.target, target), eq(schema.verificationCodes.code, code)));
+      return { ok: false, error: "验证码邮件发送失败，请稍后重试" };
+    }
     return { ok: true };
   }
   if (isCnPhone(target) && process.env.SMS_ACCESS_KEY) {
