@@ -106,10 +106,16 @@ const models = [
   ["qwen-max", "qwen", "qwen-max", "Qwen Max", 1.6, 6.4, "阿里通义", "旗舰", "通义千问旗舰，中文理解与复杂任务", "live", 40],
   ["qwen-plus", "qwen", "qwen-plus", "Qwen Plus", 0.4, 1.2, "阿里通义", "均衡", "效果与成本均衡，适合大多数业务场景", "live", 50],
   ["kimi-k2.6", "kimi", "kimi-k2.6", "Kimi K2.6", 0.95, 4.0, "月之暗面", "长文本 · Agent", "256K 超长上下文，擅长长文档与 Agent 任务", "live", 60],
-  ["minimax", "minimax", "minimax", "MiniMax", 0, 0, "MiniMax", "多模态", "语音与多模态能力见长", "coming", 70],
-  ["gpt", "openai", "gpt", "GPT", 0, 0, "OpenAI", "旗舰", "全球主流通用大模型", "coming", 80],
-  ["gemini", "google", "gemini", "Gemini", 0, 0, "Google", "多模态 · 长文本", "超长上下文与多模态理解", "coming", 90],
+  ["gpt-6.1-sol", "openai", "gpt-6.1-sol", "GPT-6.1 Sol", 2.0, 10.0, "OpenAI", "旗舰 · 均衡", "OpenAI 主力模型，推理、写作与代码兼顾，性价比高", "live", 62],
+  ["gpt-6-astra", "openai", "gpt-6-astra", "GPT-6 Astra", 10.0, 50.0, "OpenAI", "顶级 · 推理", "OpenAI 最强旗舰，适合复杂推理与高难度代码", "live", 64],
+  ["gpt-6-luna", "openai", "gpt-6-luna", "GPT-6 Luna", 0.1, 0.5, "OpenAI", "轻快", "极低成本，适合高频、简单的批量任务", "live", 66],
+  ["gemini-3.1-pro", "google", "gemini-3.1-pro-preview", "Gemini 3.1 Pro", 2.0, 12.0, "Google", "旗舰 · 长文本", "Google 旗舰，百万级上下文与多模态理解（预览版）", "live", 70],
+  ["gemini-3.8-flash", "google", "gemini-3.8-flash", "Gemini 3.8 Flash", 1.5, 7.5, "Google", "轻快 · 多模态", "响应快，适合实时对话与大批量处理", "live", 72],
+  ["doubao-seed-2.0-pro", "doubao", "doubao-seed-2-0-pro-260215", "豆包 Seed 2.0 Pro", 0.8, 4.0, "字节跳动", "旗舰 · 中文", "字节跳动豆包旗舰，中文理解与生成能力强", "live", 74],
+  ["minimax", "minimax", "minimax", "MiniMax", 0, 0, "MiniMax", "多模态", "语音与多模态能力见长", "coming", 90],
 ];
+// v32：GPT / Gemini 已正式接入，移除「即将接入」占位卡片
+await sql`DELETE FROM models WHERE id IN ('gpt', 'gemini') AND status = 'coming'`;
 for (const [id, provider, upstreamId, displayName, ui, uo, vendor, category, description, status, sortOrder] of models) {
   const [pi, po] = [r2(ui), r2(uo)];
   const enabled = status === "live";

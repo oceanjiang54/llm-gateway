@@ -7,6 +7,7 @@ const COLS: { t: string; items: ({ href: string; label: string } | { lead: strin
     { href: "/models", label: "模型市场" },
     { href: "/playground", label: "体验中心" },
     { href: "/docs/claude-code", label: "Claude Code 接入" },
+    { href: "/docs/codex", label: "Codex 接入" },
     { href: "/docs/cli", label: "命令行工具" },
   ] },
   { t: "解决方案", items: [

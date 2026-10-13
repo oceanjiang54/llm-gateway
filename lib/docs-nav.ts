@@ -10,6 +10,7 @@ export const DOC_GROUPS = [
   ] },
   { t: "工具接入", items: [
     { href: "/docs/claude-code", label: "Claude Code" },
+    { href: "/docs/codex", label: "Codex" },
     { href: "/docs/cli", label: "命令行 shutong" },
   ] },
   { t: "账户与计费", items: [{ href: "/docs/pricing", label: "计费说明" }] },

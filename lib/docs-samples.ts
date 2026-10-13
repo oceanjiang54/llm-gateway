@@ -179,5 +179,46 @@ shutong login   # 填写服务地址 ${base} 和你的密钥`,
 shutong "帮我写一条请假消息"                # 问一次就退出
 cat error.log | shutong "这段报错是什么原因"  # 把管道内容一起发送
 shutong -m qwen-plus "翻译成英文：……"       # 指定模型`,
+  
+    // ---- Codex ----
+    codexInstall: `npm install -g @openai/codex
+codex --version`,
+    codexConfig: `mkdir -p ~/.codex
+
+# 1. 定义书童这个模型服务商（追加到 ~/.codex/config.toml）
+cat >> ~/.codex/config.toml <<'EOF'
+
+[model_providers.shutong]
+name = "书童 ShuTong"
+base_url = "${base}/api/openai/v1"
+env_key = "SHUTONG_API_KEY"
+wire_api = "responses"
+EOF
+
+# 2. 书童配置档（独立文件，不影响默认的 codex）
+cat > ~/.codex/shutong.config.toml <<'EOF'
+model_provider = "shutong"
+model = "gpt-5.3-codex"
+EOF`,
+    codexSt: `# 书童密钥（与 claude-st 共用同一个文件）
+mkdir -p ~/.shutong
+printf '%s' "sk-gw-你的密钥" > ~/.shutong/cc_token
+chmod 600 ~/.shutong/cc_token
+
+cat >> ~/.zshrc <<'EOF'
+
+# Codex 经书童网关（普通的 codex 命令不受影响）
+codex-st() {
+  SHUTONG_API_KEY="$(cat ~/.shutong/cc_token)" codex --profile shutong "$@"
+}
+EOF
+source ~/.zshrc`,
+    codexUse: `codex-st                                 # 交互模式
+codex-st exec "解释一下这个项目的目录结构"   # 一次性任务
+codex-st -m gpt-6.1-sol                  # 临时换模型`,
+    codexCheck: `curl ${base}/api/openai/v1/responses \\
+  -H "Content-Type: application/json" \\
+  -H "Authorization: Bearer $SHUTONG_API_KEY" \\
+  -d '{"model": "gpt-6-luna", "input": "用五个字介绍你自己"}'`,
   };
 }

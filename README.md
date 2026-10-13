@@ -118,3 +118,14 @@ MiniMax / GPT / Gemini 在模型市场显示为「即将接入」。
 | `USD_CNY_RATE` | `7.0` | 固定汇率（2026-10-12 市场价约 6.69，向上取整留出余量） |
 | `SIGNUP_BONUS_CNY` | `30` | 注册赠送额度（元） |
 | `REPORT_TZ` | `Asia/Shanghai` | 管理后台按哪个时区划分「一天」 |
+
+## 八、v32 更新（2026-10）
+
+新接入 GPT（gpt-6.1-sol / gpt-6-astra / gpt-6-luna）、Gemini（gemini-3.1-pro / gemini-3.8-flash）、豆包（doubao-seed-2.0-pro），并新增 Codex 入口 `/api/openai/v1`（Responses 格式透传 + 人民币计费，文档见 /docs/codex）。升级后执行一次 `npm run db:setup` 写入新模型。
+
+| 变量 | 说明 |
+|---|---|
+| `OPENAI_API_KEY` | OpenAI 密钥（对话补全的 GPT 模型 + Codex 入口共用） |
+| `GEMINI_API_KEY` | Google AI Studio 的 Gemini API 密钥 |
+| `DOUBAO_API_KEY` | 火山方舟 API Key |
+| `DOUBAO_MODEL` | 可选：覆盖豆包上游模型 ID（方舟控制台里实际开通的版本，如 doubao-seed-2-0-pro-260215） |

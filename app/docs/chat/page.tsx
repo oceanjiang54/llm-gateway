@@ -36,8 +36,8 @@ export default function ChatDoc() {
           <tr><td><code>model</code> 必填</td><td>string</td><td>模型 ID，如 <code>deepseek-chat</code>、<code>qwen-plus</code>、<code>claude-sonnet-4-5</code>。可用模型见 <Link href="/docs/models">模型列表</Link></td></tr>
           <tr><td><code>messages</code> 必填</td><td>array</td><td>对话消息，每条包含 <code>role</code>（<code>system</code> / <code>user</code> / <code>assistant</code>）和 <code>content</code>（文本）</td></tr>
           <tr><td><code>stream</code></td><td>boolean</td><td>是否流式返回，默认 <code>false</code>。见 <Link href="/docs/streaming">流式输出</Link></td></tr>
-          <tr><td><code>temperature</code></td><td>number</td><td>采样温度，越高越发散</td></tr>
-          <tr><td><code>max_tokens</code></td><td>integer</td><td>本次最多生成的 tokens 数。Claude 系列未填写时默认 1024</td></tr>
+          <tr><td><code>temperature</code></td><td>number</td><td>采样温度，越高越发散。GPT-6 系列为推理模型，不支持此参数，网关会自动忽略</td></tr>
+          <tr><td><code>max_tokens</code></td><td>integer</td><td>本次最多生成的 tokens 数。Claude 系列未填写时默认 1024；GPT 系列由网关自动转为 <code>max_completion_tokens</code></td></tr>
           <tr><td><code>conversation_id</code></td><td>string</td><td>书童扩展：开启平台记忆。见 <Link href="/docs/memory">平台记忆</Link></td></tr>
         </tbody>
       </table>

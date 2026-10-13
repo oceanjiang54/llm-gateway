@@ -2,7 +2,7 @@
 import { useState } from "react";
 import ModelCard, { ModelInfo } from "./ModelCard";
 
-const DOMESTIC = ["deepseek", "qwen", "kimi", "minimax"];
+const DOMESTIC = ["deepseek", "qwen", "kimi", "doubao", "minimax"];
 const FILTERS: { k: string; label: string; test: (m: ModelInfo) => boolean }[] = [
   { k: "all", label: "全部", test: () => true },
   { k: "live", label: "可立即调用", test: (m) => m.status === "live" },

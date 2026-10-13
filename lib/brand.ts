@@ -7,6 +7,7 @@ const AV: Record<string, { bg: string; fg: string; ch: string }> = {
   minimax: { bg: "#fdecef", fg: "#b8364e", ch: "M" },
   openai: { bg: "#eceef1", fg: "#2b2f36", ch: "G" },
   google: { bg: "#e6f1fc", fg: "#1f6fbf", ch: "G" },
+  doubao: { bg: "#e8f3fe", fg: "#1764c8", ch: "豆" },
 };
 export function avatarOf(provider: string, name = "") {
   return AV[provider] ?? { bg: "#eceef1", fg: "#545c73", ch: (name[0] || "?").toUpperCase() };
@@ -17,8 +18,9 @@ export const ECOSYSTEM = [
   { name: "DeepSeek", provider: "deepseek" },
   { name: "Qwen", provider: "qwen" },
   { name: "Kimi", provider: "kimi" },
+  { name: "豆包", provider: "doubao" },
   { name: "Claude", provider: "anthropic" },
-  { name: "MiniMax", provider: "minimax" },
   { name: "GPT", provider: "openai" },
   { name: "Gemini", provider: "google" },
+  { name: "MiniMax", provider: "minimax" },
 ];

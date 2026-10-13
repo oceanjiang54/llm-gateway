@@ -4,6 +4,7 @@ import DocNext from "@/components/docs/DocNext";
 import { db, schema } from "@/lib/db";
 import { SIGNUP_BONUS_CNY, USD_CNY } from "@/lib/currency";
 import { claudeCnyPriceList } from "@/lib/claude-pricing";
+import { openaiCnyPriceList } from "@/lib/openai-pricing";
 
 export const dynamic = "force-dynamic";
 export const metadata = { title: "计费说明 · 书童文档" };
@@ -15,6 +16,7 @@ export default async function PricingDoc() {
     .where(and(eq(schema.models.enabled, true), eq(schema.models.status, "live")))
     .orderBy(asc(schema.models.sortOrder));
   const claude = claudeCnyPriceList(USD_CNY);
+  const codex = openaiCnyPriceList(USD_CNY);
   return (
     <>
       <h1>计费说明</h1>
@@ -51,6 +53,18 @@ export default async function PricingDoc() {
         </tbody>
       </table>
       <p style={{ fontSize: 13.5 }}>Claude Haiku 5.5 单次输入超过 10 万 tokens 时按长上下文价格计费（约为上表的 5 倍）。</p>
+
+      <h2>Codex 价格</h2>
+      <p>适用于 <code>/api/openai/v1</code> 入口，单位：元 / 百万 tokens。输入中命中缓存的部分按缓存价计费。</p>
+      <table>
+        <thead><tr><th>模型 ID</th><th>输入</th><th>缓存命中</th><th>输出</th></tr></thead>
+        <tbody>
+          {codex.map((m) => (
+            <tr key={m.id}><td><code>{m.id}</code></td><td>{f(m.in)}</td><td>{f(m.cached)}</td><td>{f(m.out)}</td></tr>
+          ))}
+        </tbody>
+      </table>
+      <p style={{ fontSize: 13.5 }}>Gemini 3.1 Pro 单次输入超过 20 万 tokens 时，按 Google 官方长上下文价格计费。</p>
       <DocNext href="/docs/pricing" />
     </>
   );

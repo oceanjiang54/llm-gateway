@@ -14,7 +14,7 @@ export default function QuickStart() {
   return (
     <>
       <h1>三分钟上手</h1>
-      <p className="lead">书童提供 OpenAI 兼容的统一接口：一个 API Key、一个 Base URL，即可调用 DeepSeek、Qwen、Kimi、Claude 等模型，按实际用量以人民币计费。</p>
+      <p className="lead">书童提供 OpenAI 兼容的统一接口：一个 API Key、一个 Base URL，即可调用 DeepSeek、Qwen、Kimi、豆包、Claude、GPT、Gemini 等模型，按实际用量以人民币计费。</p>
 
       <h2 className="docs-step"><span className="n">1</span>获取 API Key</h2>
       <p><Link href="/register">注册账号</Link>（赠送 ¥{SIGNUP_BONUS_CNY} 试用额度），然后在 <Link href="/console/keys">控制台 → API Keys</Link> 创建密钥。密钥形如 <code>sk-gw-…</code>，只在创建时显示一次，请保存到密码管理器或环境变量，不要写进代码仓库。</p>
@@ -42,6 +42,7 @@ export default function QuickStart() {
       <h3>路径 B：在工具中使用</h3>
       <div className="dcards">
         <Link href="/docs/claude-code" className="dcard"><b>Claude Code</b><span>设置两个环境变量，让 Claude Code 的调用经书童鉴权与计费。</span></Link>
+        <Link href="/docs/codex" className="dcard"><b>Codex</b><span>为 OpenAI Codex CLI 添加书童服务商，用 codex-st 启动。</span></Link>
         <Link href="/docs/cli" className="dcard"><b>命令行 shutong</b><span>在终端里选模型、对话，默认开启平台记忆。</span></Link>
       </div>
 

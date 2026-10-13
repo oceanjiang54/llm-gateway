@@ -27,4 +27,28 @@ export const providers: Record<string, Provider> = {
     keyEnv: "KIMI_API_KEY",
     extraBody: { thinking: { type: "disabled" } },
   }),
+  // OpenAI 官方。GPT-6 系列为推理模型：用 max_completion_tokens，不传 temperature
+  openai: makeOpenAICompat({
+    name: "OpenAI",
+    baseUrlEnv: "OPENAI_BASE_URL",
+    defaultBaseUrl: "https://api.openai.com/v1",
+    keyEnv: "OPENAI_API_KEY",
+    maxTokensField: "max_completion_tokens",
+    omitTemperature: true,
+  }),
+  // Google Gemini 的 OpenAI 兼容层
+  google: makeOpenAICompat({
+    name: "Gemini",
+    baseUrlEnv: "GEMINI_BASE_URL",
+    defaultBaseUrl: "https://generativelanguage.googleapis.com/v1beta/openai",
+    keyEnv: "GEMINI_API_KEY",
+  }),
+  // 字节跳动火山方舟（豆包）；模型 ID 带版本日期，可用 DOUBAO_MODEL 覆盖为控制台里实际开通的版本
+  doubao: makeOpenAICompat({
+    name: "Doubao",
+    baseUrlEnv: "DOUBAO_BASE_URL",
+    defaultBaseUrl: "https://ark.cn-beijing.volces.com/api/v3",
+    keyEnv: "DOUBAO_API_KEY",
+    modelEnv: "DOUBAO_MODEL",
+  }),
 };
